@@ -2,18 +2,27 @@
   "name": "driver-earning-optimization",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3001",
   "dependencies": {
+    "@tanstack/react-query": "^5.80.7",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
+    "@types/leaflet": "^1.9.18",
     "@types/node": "^16.18.126",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "@types/styled-components": "^5.1.34",
+    "leaflet": "^1.9.4",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "react-leaflet": "^5.0.0",
+    "react-router-dom": "^7.6.2",
     "react-scripts": "5.0.1",
+    "recharts": "^2.15.3",
+    "styled-components": "^6.1.18",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
@@ -21,7 +30,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "backend": "cd backend && npm run dev",
+    "db:up": "docker compose up -d",
+    "db:migrate": "cd backend && npm run db:push && npm run db:seed"
   },
   "eslintConfig": {
     "extends": [

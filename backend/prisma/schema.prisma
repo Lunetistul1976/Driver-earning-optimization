@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Driver {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  shifts    Shift[]
+}
+
+model Shift {
+  id           String           @id @default(uuid())
+  driverId     String
+  driver       Driver           @relation(fields: [driverId], references: [id])
+  startTime    DateTime
+  endTime      DateTime?
+  totalRevenue Decimal          @default(0) @db.Decimal(10, 2)
+  createdAt    DateTime         @default(now())
+  rides        Ride[]
+  positions    DriverPosition[]
+}
+
+model Ride {
+  id              String    @id @default(uuid())
+  shiftId         String
+  shift           Shift     @relation(fields: [shiftId], references: [id])
+  acceptedAt      DateTime
+  completedAt     DateTime?
+  pickupLat       Float
+  pickupLng       Float
+  dropoffLat      Float?
+  dropoffLng      Float?
+  fareAmount      Decimal   @db.Decimal(10, 2)
+  durationMinutes Int?
+  createdAt       DateTime  @default(now())
+}
+
+model DriverPosition {
+  id        String   @id @default(uuid())
+  shiftId   String
+  shift     Shift    @relation(fields: [shiftId], references: [id])
+  latitude  Float
+  longitude Float
+  speed     Float?
+  timestamp DateTime @default(now())
+}
+
+model WeatherSnapshot {
+  id          String   @id @default(uuid())
+  temperature Float
+  rain        Float
+  windSpeed   Float
+  timestamp   DateTime @default(now())
+}
+
+model Zone {
+  id           String   @id
+  name         String
+  latitude     Float
+  longitude    Float
+  radiusMeters Int
+  createdAt    DateTime @default(now())
+}
+
+model ZoneRecommendation {
+  id                    String   @id @default(uuid())
+  zoneId                String
+  zoneName              String
+  score                 Float
+  expectedHourlyRevenue Float
+  distanceKm            Float?
+  travelTimeMinutes     Float?
+  rank                  Int
+  calculatedAt          DateTime @default(now())
+}
+
+model HeatmapCell {
+  id        String   @id @default(uuid())
+  latitude  Float
+  longitude Float
+  score     Float
+  rideCount Int
+  revenue   Decimal  @db.Decimal(10, 2)
+  date      DateTime @db.Date
+  createdAt DateTime @default(now())
+
+  @@unique([latitude, longitude, date])
+}
